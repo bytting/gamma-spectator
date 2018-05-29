@@ -42,16 +42,18 @@ namespace crash
         private FormContainer parent = null;
         private GASettings settings = null;
         private ILog log = null;
-        
+
         // Concurrent queue used to receive messages from network thread
-        static ConcurrentQueue<APISpectrum> recvq = null;        
+        static ConcurrentQueue<APISpectrum> recvq = new ConcurrentQueue<APISpectrum>();
 
-        // Networking thread        
-        static burn.NetService netService = null;
-        static Thread netThread = null;
-
-        // Timer used to poll for network messages
+        // Timer used to add spectrums to session
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+
+        // Timer used to sync spectrums from web service
+        private WSInfo wsinfo = new WSInfo();
+        private System.Threading.Timer atimer = null;
+        private const long atimerInterval = 3000;
+        private static object atimerLocker = new object();
 
         // Currently loaded sessions
         private Session session = null, bkgSession = null;
@@ -96,9 +98,6 @@ namespace crash
         {
             try
             {
-                netService = new burn.NetService(log, ref recvq);
-                netThread = new Thread(netService.DoWork);
-
                 // Hide tabs on tabcontrol
                 tabs.ItemSize = new Size(0, 1);
                 tabs.SizeMode = TabSizeMode.Fixed;
@@ -124,14 +123,13 @@ namespace crash
 
                 menu.Visible = false;
 
-                // Start threads
-                netThread.Start();
-                while (!netThread.IsAlive) ;
-
-                // Start timer listening for network messages
+                // Start timer for adding spectrums to session
                 timer.Interval = 10;
                 timer.Tick += timer_Tick;
                 timer.Start();
+                
+                // Start timer for syncing current session
+                atimer = new System.Threading.Timer(atimer_Tick, wsinfo, atimerInterval, atimerInterval);
             }
             catch(Exception ex)
             {
@@ -148,7 +146,64 @@ namespace crash
                 if (recvq.TryDequeue(out apiSpec))
                     dispatchRecvMsg(apiSpec);
             }            
-        }        
+        }
+
+        void atimer_Tick(object state)
+        {
+            var hasLock = false;
+
+            try
+            {
+                Monitor.TryEnter(atimerLocker, ref hasLock);
+                if (!hasLock)                
+                    return;
+                
+                atimer.Change(Timeout.Infinite, Timeout.Infinite);
+                
+                HttpWebRequest request = null;
+
+                lock (wsinfo)
+                {
+                    if (String.IsNullOrEmpty(wsinfo.SessionName))
+                        return;
+
+                    request = (HttpWebRequest)WebRequest.Create(wsinfo.WSAddress + "/spectrums/" + wsinfo.SessionName + "?minIdx=" + (wsinfo.LastSessionIndex + 1));
+                    string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(wsinfo.Username + ":" + wsinfo.Password));
+                    request.Headers.Add("Authorization", "Basic " + credentials);
+                    request.Timeout = 8000;
+                    request.Method = WebRequestMethods.Http.Get;
+                    request.Accept = "application/json";
+                }
+
+                string data;
+                HttpStatusCode code = Utils.GetResponseData(request, out data);
+
+                if (code != HttpStatusCode.OK)
+                {
+                    log.Error(code.ToString() + ": " + data);
+                    return;
+                }
+
+                List<APISpectrum> spectrumList = JsonConvert.DeserializeObject<List<APISpectrum>>(data);
+                foreach (APISpectrum apiSpec in spectrumList)
+                {
+                    recvq.Enqueue(apiSpec);
+                }
+
+                lock (wsinfo)
+                {
+                    wsinfo.LastSessionIndex = spectrumList.Count > 0 ? spectrumList.Max(x => x.SessionIndex) : -1;
+                }
+            }
+            finally
+            {
+                if (hasLock)
+                {
+                    Monitor.Exit(atimerLocker);
+                    atimer.Change(atimerInterval, atimerInterval);
+                }
+            }
+        }
 
         public void makeGraphObjectType(ref object tag, GraphObjectType got)
         {
@@ -581,6 +636,7 @@ namespace crash
             if (form.ShowDialog() != DialogResult.OK)
                 return;
 
+            atimer.Dispose();
             parent.ClearSession();
 
             session = new Session(form.SelectedSession);            
@@ -616,6 +672,17 @@ namespace crash
             parent.SetSession(session);
 
             log.Info("session " + session.Name + " loaded");
+
+            lock (wsinfo)
+            {
+                wsinfo.WSAddress = settings.LastUploadHostname;
+                wsinfo.Username = settings.LastUploadUsername;
+                wsinfo.Password = settings.LastUploadPassword;
+                wsinfo.SessionName = session.Name;
+                wsinfo.LastSessionIndex = spectrumList.Count > 0 ? spectrumList.Max(x => x.SessionIndex) : -1;
+            }
+
+            atimer = new System.Threading.Timer(atimer_Tick, wsinfo, atimerInterval, atimerInterval);
         }
 
         public void SetSession(Session s)
@@ -1076,16 +1143,11 @@ namespace crash
 
         public void Shutdown()
         {
-            if (netService.IsRunning())
-            {
-                netService.RequestStop();
-                netThread.Join();
-                log.Info("net service closed");
-            }
-
-            // Stop timer listening for network messages
+            if (atimer != null)
+                atimer.Dispose();
+            
             timer.Stop();
-        }
+        }        
 
         private void menuItemUseAsGroundLevel_Click(object sender, EventArgs e)
         {
@@ -1102,5 +1164,14 @@ namespace crash
             currentGroundLevelIndex = spec.SessionIndex;
             lblGroundLevelIndex.Text = "Gnd idx: " + currentGroundLevelIndex;
         }
-    }
+
+        private class WSInfo
+        {
+            public string WSAddress { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string SessionName { get; set; }
+            public int LastSessionIndex { get; set; }
+        }
+    }    
 }

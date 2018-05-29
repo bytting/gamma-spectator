@@ -151,7 +151,6 @@
     <Compile Include="FormSelectSession.Designer.cs">
       <DependentUpon>FormSelectSession.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetService.cs" />
     <Compile Include="CustomEvents.cs" />
     <Compile Include="Detector.cs" />
     <Compile Include="EnergyComp.cs" />

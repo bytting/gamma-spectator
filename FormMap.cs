@@ -56,8 +56,8 @@ namespace crash
                 gmnMap.Overlays.Add(overlay);
                 gmnMap.Position = new PointLatLng(59.946534, 10.598574);
 
-                gmnMap.MapProvider = ArcGIS_World_Topo_MapProvider.Instance;
-                int idx = cboxMapProvider.FindString("ArcGIS World Topo");
+                gmnMap.MapProvider = BingSatelliteMapProvider.Instance;
+                int idx = cboxMapProvider.FindString("Bing Map Satellite");
                 if (idx >= 0)
                     cboxMapProvider.SelectedIndex = idx;
             }
