@@ -184,8 +184,9 @@
             this.gmnMap.LevelsKeepInMemmory = 5;
             this.gmnMap.Location = new System.Drawing.Point(0, 25);
             this.gmnMap.MarkersEnabled = true;
-            this.gmnMap.MaxZoom = 24;
+            this.gmnMap.MaxZoom = 18;
             this.gmnMap.MinZoom = 2;
+            this.gmnMap.MouseWheelZoomEnabled = true;
             this.gmnMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.gmnMap.Name = "gmnMap";
             this.gmnMap.NegativeMode = false;
@@ -196,8 +197,8 @@
             this.gmnMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gmnMap.ShowTileGridLines = false;
             this.gmnMap.Size = new System.Drawing.Size(708, 417);
-            this.gmnMap.TabIndex = 7;
-            this.gmnMap.Zoom = 10D;
+            this.gmnMap.TabIndex = 5;
+            this.gmnMap.Zoom = 5D;
             this.gmnMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
             // 
             // FormMap
@@ -236,8 +237,8 @@
         private System.Windows.Forms.ToolStripButton btnZoomOut;
         private System.Windows.Forms.ToolStripButton btnZoomIn;
         private System.Windows.Forms.ToolStripButton btnZoomToMin;
-        private GMap.NET.WindowsForms.GMapControl gmnMap;
         private System.Windows.Forms.ToolStripDropDownButton ddbOptions;
         private System.Windows.Forms.ToolStripMenuItem menuItemIAEAColors;
+        private GMap.NET.WindowsForms.GMapControl gmnMap;
     }
 }

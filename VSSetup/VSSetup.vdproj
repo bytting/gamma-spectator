@@ -15,12 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_2800F141255C4E9096F14B91628AF707"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_397809FFF996D9EAE3A667FACCDFE4F0"
         "OwnerKey" = "8:_9B27635AFA154CD7B9125193F7F51347"
         "MsmSig" = "8:_UNDEFINED"
@@ -89,12 +83,6 @@
         {
         "MsmKey" = "8:_EB45EB9DE95FB5384B81C62AA8DEAFA3"
         "OwnerKey" = "8:_9B27635AFA154CD7B9125193F7F51347"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ED2BBADF9C12427EB3F2328E61E8A41C"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -286,26 +274,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2800F141255C4E9096F14B91628AF707"
-            {
-            "SourcePath" = "8:..\\packages\\NLua.1.3.2.1\\lib\\native\\x64\\lua52.dll"
-            "TargetName" = "8:lua52.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_83F66B7A2D474DDBA05DBC7A536E7F77"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_397809FFF996D9EAE3A667FACCDFE4F0"
             {
             "AssemblyRegister" = "3:1"
@@ -313,11 +281,6 @@
             "AssemblyAsmDisplayName" = "8:GMap.NET.WindowsForms, Version=1.7.5.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_397809FFF996D9EAE3A667FACCDFE4F0"
-                    {
-                    "Name" = "8:GMap.NET.WindowsForms.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:GMap.NET.WindowsForms.dll"
             "TargetName" = "8:"
@@ -344,11 +307,6 @@
             "AssemblyAsmDisplayName" = "8:NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8CBDC6137F9E9721D2256AAB8DC1743D"
-                    {
-                    "Name" = "8:NLua.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:NLua.dll"
             "TargetName" = "8:"
@@ -375,11 +333,6 @@
             "AssemblyAsmDisplayName" = "8:MathNet.Numerics, Version=3.13.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_99F86E2DE4553DE8658B092546B399C0"
-                    {
-                    "Name" = "8:MathNet.Numerics.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:MathNet.Numerics.dll"
             "TargetName" = "8:"
@@ -406,11 +359,6 @@
             "AssemblyAsmDisplayName" = "8:GMap.NET.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B6199B918A1AB6E7ED4F1FC27EE61280"
-                    {
-                    "Name" = "8:GMap.NET.Core.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:GMap.NET.Core.dll"
             "TargetName" = "8:"
@@ -437,11 +385,6 @@
             "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_BC4A4A41121A2627145F2EF83AF0CD74"
-                    {
-                    "Name" = "8:System.Data.SQLite.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Data.SQLite.dll"
             "TargetName" = "8:"
@@ -468,11 +411,6 @@
             "AssemblyAsmDisplayName" = "8:DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C2559FC6DE420532F3059D480E738AB0"
-                    {
-                    "Name" = "8:DotNetZip.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:DotNetZip.dll"
             "TargetName" = "8:"
@@ -519,11 +457,6 @@
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E6EC207B5F75831C30B682C311254FE3"
-                    {
-                    "Name" = "8:Newtonsoft.Json.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
@@ -550,11 +483,6 @@
             "AssemblyAsmDisplayName" = "8:ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_EB45EB9DE95FB5384B81C62AA8DEAFA3"
-                    {
-                    "Name" = "8:ZedGraph.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ZedGraph.dll"
             "TargetName" = "8:"
@@ -574,26 +502,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED2BBADF9C12427EB3F2328E61E8A41C"
-            {
-            "SourcePath" = "8:..\\packages\\System.Data.SQLite.Core.1.0.105.2\\build\\net45\\x64\\SQLite.Interop.dll"
-            "TargetName" = "8:SQLite.Interop.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_83F66B7A2D474DDBA05DBC7A536E7F77"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F8C4EADA97DDD82D924D4CD32E31773E"
             {
             "AssemblyRegister" = "3:1"
@@ -601,11 +509,6 @@
             "AssemblyAsmDisplayName" = "8:log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_F8C4EADA97DDD82D924D4CD32E31773E"
-                    {
-                    "Name" = "8:log4net.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:log4net.dll"
             "TargetName" = "8:"
@@ -632,11 +535,6 @@
             "AssemblyAsmDisplayName" = "8:KeraLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=04d04586786c6f34, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_FBA0804A5473281574B9F4D9227968CB"
-                    {
-                    "Name" = "8:KeraLua.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:KeraLua.dll"
             "TargetName" = "8:"

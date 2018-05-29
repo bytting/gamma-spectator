@@ -31,7 +31,6 @@ using System.Globalization;
 using Newtonsoft.Json;
 using ZedGraph;
 using MathNet.Numerics;
-using System.Data.SQLite;
 using log4net;
 using System.Net;
 
@@ -46,17 +45,16 @@ namespace crash
         // Concurrent queue used to receive messages from network thread
         static ConcurrentQueue<APISpectrum> recvq = new ConcurrentQueue<APISpectrum>();
 
+        // Sync thread
+        static SessionSync syncService = null;
+        static Thread syncThread = null;
+        static SessionSyncArgs syncArgs = new SessionSyncArgs();
+
         // Timer used to add spectrums to session
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
-        // Timer used to sync spectrums from web service
-        private WSInfo wsinfo = new WSInfo();
-        private System.Threading.Timer atimer = null;
-        private const long atimerInterval = 3000;
-        private static object atimerLocker = new object();
-
         // Currently loaded sessions
-        private Session session = null, bkgSession = null;
+        private Session session = null;
 
         // Point lists with graph data        
         private PointPairList sessionGraphList = new PointPairList();
@@ -108,8 +106,6 @@ namespace crash
                 LoadNuclideLibrary();                
 
                 // Populate UI
-                tbPreferencesSessionDir.Text = settings.SessionRootDirectory;
-
                 lblGroundLevelIndex.Text = "";
                 lblSessionSelChannel.Text = "";
                 lblSessionsDatabase.Text = "";                
@@ -123,13 +119,18 @@ namespace crash
 
                 menu.Visible = false;
 
+                // Create sync thread
+                syncService = new SessionSync(log, recvq);
+                syncThread = new Thread(syncService.DoWork);
+
+                // Start thread
+                syncThread.Start();
+                while (!syncThread.IsAlive) ;
+
                 // Start timer for adding spectrums to session
                 timer.Interval = 10;
                 timer.Tick += timer_Tick;
                 timer.Start();
-                
-                // Start timer for syncing current session
-                atimer = new System.Threading.Timer(atimer_Tick, wsinfo, atimerInterval, atimerInterval);
             }
             catch(Exception ex)
             {
@@ -146,63 +147,6 @@ namespace crash
                 if (recvq.TryDequeue(out apiSpec))
                     dispatchRecvMsg(apiSpec);
             }            
-        }
-
-        void atimer_Tick(object state)
-        {
-            var hasLock = false;
-
-            try
-            {
-                Monitor.TryEnter(atimerLocker, ref hasLock);
-                if (!hasLock)                
-                    return;
-                
-                atimer.Change(Timeout.Infinite, Timeout.Infinite);
-                
-                HttpWebRequest request = null;
-
-                lock (wsinfo)
-                {
-                    if (String.IsNullOrEmpty(wsinfo.SessionName))
-                        return;
-
-                    request = (HttpWebRequest)WebRequest.Create(wsinfo.WSAddress + "/spectrums/" + wsinfo.SessionName + "?minIdx=" + (wsinfo.LastSessionIndex + 1));
-                    string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(wsinfo.Username + ":" + wsinfo.Password));
-                    request.Headers.Add("Authorization", "Basic " + credentials);
-                    request.Timeout = 8000;
-                    request.Method = WebRequestMethods.Http.Get;
-                    request.Accept = "application/json";
-                }
-
-                string data;
-                HttpStatusCode code = Utils.GetResponseData(request, out data);
-
-                if (code != HttpStatusCode.OK)
-                {
-                    log.Error(code.ToString() + ": " + data);
-                    return;
-                }
-
-                List<APISpectrum> spectrumList = JsonConvert.DeserializeObject<List<APISpectrum>>(data);
-                foreach (APISpectrum apiSpec in spectrumList)
-                {
-                    recvq.Enqueue(apiSpec);
-                }
-
-                lock (wsinfo)
-                {
-                    wsinfo.LastSessionIndex = spectrumList.Count > 0 ? spectrumList.Max(x => x.SessionIndex) : -1;
-                }
-            }
-            finally
-            {
-                if (hasLock)
-                {
-                    Monitor.Exit(atimerLocker);
-                    atimer.Change(atimerInterval, atimerInterval);
-                }
-            }
         }
 
         public void makeGraphObjectType(ref object tag, GraphObjectType got)
@@ -636,53 +580,23 @@ namespace crash
             if (form.ShowDialog() != DialogResult.OK)
                 return;
 
-            atimer.Dispose();
+            syncService.Deactivate();
+
             parent.ClearSession();
 
-            session = new Session(form.SelectedSession);            
+            session = new Session(form.SelectedSession);
 
-            // Update UI
-            lblSessionsDatabase.Text = session.Name;
-            lblSession.Text = session.Name;
-            lblComment.Text = session.Comment;
+            parent.SetSession(session);            
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(settings.LastUploadHostname + "/spectrums/" + session.Name);
-            string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(settings.LastUploadUsername + ":" + settings.LastUploadPassword));
-            request.Headers.Add("Authorization", "Basic " + credentials);
-            request.Timeout = 20000;
-            request.Method = WebRequestMethods.Http.Get;
-            request.Accept = "application/json";
+            syncArgs.WSAddress = settings.LastUploadHostname;
+            syncArgs.Username = settings.LastUploadUsername;
+            syncArgs.Password = settings.LastUploadPassword;
+            syncArgs.SessionName = session.Name;
+            syncArgs.LastSessionIndex = -1;
 
-            string data;
-            HttpStatusCode code = Utils.GetResponseData(request, out data);
+            syncService.Activate(syncArgs);
 
-            if (code != HttpStatusCode.OK)
-            {
-                log.Error(code.ToString() + ": " + data);
-                return;
-            }            
-
-            List<APISpectrum> spectrumList = JsonConvert.DeserializeObject<List<APISpectrum>>(data);
-            foreach (APISpectrum apiSpec in spectrumList)
-            {
-                Spectrum spec = new Spectrum(apiSpec);
-                session.Add(spec);
-            }
-
-            parent.SetSession(session);
-
-            log.Info("session " + session.Name + " loaded");
-
-            lock (wsinfo)
-            {
-                wsinfo.WSAddress = settings.LastUploadHostname;
-                wsinfo.Username = settings.LastUploadUsername;
-                wsinfo.Password = settings.LastUploadPassword;
-                wsinfo.SessionName = session.Name;
-                wsinfo.LastSessionIndex = spectrumList.Count > 0 ? spectrumList.Max(x => x.SessionIndex) : -1;
-            }
-
-            atimer = new System.Threading.Timer(atimer_Tick, wsinfo, atimerInterval, atimerInterval);
+            log.Info("Session " + session.Name + " loaded");
         }
 
         public void SetSession(Session s)
@@ -690,48 +604,10 @@ namespace crash
             foreach (Spectrum spec in s.Spectrums)            
                 lbSession.Items.Insert(0, spec);
 
+            lblSessionsDatabase.Text = "Session: " + session.Name;
             lblSession.Text = "Session: " + session.Name;
+            lblComment.Text = session.Comment;
         }
-
-        private void menuItemLoadBackgroundSession_Click(object sender, EventArgs e)
-        {
-            if(session == null || !session.IsLoaded)
-            {
-                MessageBox.Show("You must load a session first");
-                return;
-            }
-
-            try
-            {
-                openSessionDialog.InitialDirectory = settings.SessionRootDirectory;
-                openSessionDialog.Title = "Select background session file";
-                if (openSessionDialog.ShowDialog() == DialogResult.OK)
-                {
-                    ClearBackground();
-                    
-                    bkgSession = DB.LoadSessionFile(openSessionDialog.FileName);
-
-                    // Make sure session and backgrouns has the same number of channels
-                    if (bkgSession.NumChannels != session.NumChannels)
-                    {
-                        bkgSession.Clear();
-                        MessageBox.Show("Cannot load a background with different number of channels than the session");
-                        return;
-                    }
-
-                    // Store background in session
-                    session.SetBackgroundSession(bkgSession);
-
-                    lblBackground.Text = "Background: " + bkgSession.Name;
-                    log.Info("Background " + bkgSession.Name + " loaded for session " + session.Name);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex.Message, ex);
-                return;
-            }
-        }        
 
         private void graphSession_MouseMove(object sender, MouseEventArgs e)
         {            
@@ -787,17 +663,7 @@ namespace crash
         {
             FormROIHist form = new FormROIHist(settings, log, session);
             form.ShowDialog();
-        }
-
-        private void btnSetSessionDir_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                tbPreferencesSessionDir.Text = dialog.SelectedPath;
-                settings.SessionRootDirectory = tbPreferencesSessionDir.Text;
-            }
-        }                
+        }                        
 
         private void graphSession_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -996,24 +862,7 @@ namespace crash
         private void btnSessionsClose_Click(object sender, EventArgs e)
         {
             tabs.SelectedTab = pageMenu;
-        }                                        
-
-        private void btnPreferencesCancel_Click(object sender, EventArgs e)
-        {
-            tabs.SelectedTab = pageMenu;
-        }
-
-        private void btnMenuPreferences_Click_1(object sender, EventArgs e)
-        {
-            tabs.SelectedTab = pagePreferences;
-        }
-
-        private void btnPreferencesSave_Click(object sender, EventArgs e)
-        {
-            settings.SessionRootDirectory = tbPreferencesSessionDir.Text;
-            parent.SaveSettings();
-            tabs.SelectedTab = pageMenu;
-        }                        
+        }                                                
 
         private void menuItemLoadBackgroundSelection_Click(object sender, EventArgs e)
         {
@@ -1059,79 +908,6 @@ namespace crash
             log.Info("Background selection " + minIndex + " -> " + maxIndex + " loaded for session " + session.Name);            
         }
 
-        private void menuItemAdjustZero_Click(object sender, EventArgs e)
-        {
-            if (selectedChannel == 0)
-            {
-                MessageBox.Show("No channel selected");
-                return;
-            }
-
-            if (session.Detector.EnergyCurveCoefficients.Count < 1)
-            {
-                MessageBox.Show("Detector has no energy curve coefficients");
-                return;
-            }
-
-            try
-            {
-                bool canUpdateSettingsDetector = settings.Detectors.Exists(x => x.Serialnumber == session.Detector.Serialnumber);
-
-                FormAskZeroPolynomial form = new FormAskZeroPolynomial(log, session.Detector, selectedChannel, canUpdateSettingsDetector);
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    session.Detector.EnergyCurveCoefficients[0] = form.ZeroPolynomial;
-                    // FIXME: Save session.Detector to database
-
-                    string sessionPath = settings.SessionRootDirectory + Path.DirectorySeparatorChar + session.Name + ".db";
-                    if (!File.Exists(sessionPath))
-                    {
-                        MessageBox.Show("Unable to find session database: " + sessionPath);
-                        return;
-                    }
-
-                    using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + sessionPath + "; Version=3; FailIfMissing=True; Foreign Keys=True;"))
-                    {
-                        connection.Open();
-                        SQLiteCommand command = new SQLiteCommand(connection);
-                        command.CommandText = "select id from session where name = @name";
-                        command.Parameters.AddWithValue("@name", session.Name);
-                        object o = command.ExecuteScalar();
-                        if (o == null || o == DBNull.Value)
-                        {
-                            log.Error("Unable to find session name " + session.Name + " in database");
-                            return;
-                        }
-                        int sessionId = Convert.ToInt32(o);
-
-                        string detectorData = JsonConvert.SerializeObject(session.Detector, Newtonsoft.Json.Formatting.None);
-
-                        command.Parameters.Clear();
-                        command.CommandText = "update session set detector_data=@detector_data where id=@id";
-                        command.Parameters.AddWithValue("@detector_data", detectorData);
-                        command.Parameters.AddWithValue("@id", sessionId);
-                        command.ExecuteNonQuery();
-                    }
-
-                    if (form.SaveToSettings)
-                    {
-                        Detector settingsDetector = settings.Detectors.Find(x => x.Serialnumber == session.Detector.Serialnumber);
-                        if (settingsDetector == null)
-                        {
-                            MessageBox.Show("Detector " + session.Detector.Serialnumber + " was not found in settings");
-                            return;
-                        }
-                        settingsDetector.EnergyCurveCoefficients = session.Detector.EnergyCurveCoefficients;
-                        parent.SaveSettings();
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex.Message, ex);
-            }
-        }
-
         private void graphSession_MouseClick(object sender, MouseEventArgs e)
         {
             int x, y;
@@ -1143,8 +919,12 @@ namespace crash
 
         public void Shutdown()
         {
-            if (atimer != null)
-                atimer.Dispose();
+            if (syncService.IsRunning())
+            {
+                syncService.RequestStop();
+                syncThread.Join();
+                log.Info("sync service closed");
+            }
             
             timer.Stop();
         }        
@@ -1163,15 +943,6 @@ namespace crash
             Spectrum spec = lbSession.SelectedItems[0] as Spectrum;
             currentGroundLevelIndex = spec.SessionIndex;
             lblGroundLevelIndex.Text = "Gnd idx: " + currentGroundLevelIndex;
-        }
-
-        private class WSInfo
-        {
-            public string WSAddress { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string SessionName { get; set; }
-            public int LastSessionIndex { get; set; }
         }
     }    
 }

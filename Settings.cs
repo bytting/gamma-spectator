@@ -31,10 +31,6 @@ namespace crash
     {
         public GASettings() 
         {
-            SessionRootDirectory = GAEnvironment.SettingsPath + Path.DirectorySeparatorChar + "Sessions";
-            if (!Directory.Exists(SessionRootDirectory))
-                Directory.CreateDirectory(SessionRootDirectory);
-
             LastHostname = "";
             LastUploadHostname = "";
             LastUploadUsername = "";
@@ -42,16 +38,9 @@ namespace crash
             DisplayLocalTime = true;
         }
 
-        // List of detector definitions
-        [XmlArray("Detectors")]
-        public List<Detector> Detectors = new List<Detector>();
-
         // List of ROI definitions
         [XmlArray("ROIList")]
         public List<ROIData> ROIList = new List<ROIData>();
-
-        // Directory used to store sessions
-        public string SessionRootDirectory;        
 
         // Last IP address used
         public string LastHostname;

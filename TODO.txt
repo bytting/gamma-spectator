@@ -1,2 +1,0 @@
-
-Move detector config into separate, detector specific modules

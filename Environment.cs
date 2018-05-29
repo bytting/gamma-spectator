@@ -25,10 +25,7 @@ namespace crash
     public static class GAEnvironment
     {
         // Settings path
-        public static string SettingsPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) + Path.DirectorySeparatorChar + "GammaAnalyzer";
-
-        // GE scripts path
-        public static string GEScriptPath = SettingsPath + Path.DirectorySeparatorChar + "GEScripts";        
+        public static string SettingsPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) + Path.DirectorySeparatorChar + "GammaSpectator";
 
         // Settings filename
         public static string SettingsFile = SettingsPath + Path.DirectorySeparatorChar + "settings.xml";

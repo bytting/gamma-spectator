@@ -20,7 +20,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using NLua;
 using Newtonsoft.Json;
 
 namespace crash
@@ -28,12 +27,6 @@ namespace crash
     // Class to store a session
     public class Session
     {
-        // Global Lua object
-        private static Lua LuaEngine = new Lua();
-
-        // Function used to calculate GE factor
-        public LuaFunction GEScriptFunc = null;
-
         // IP Address of peer  
         public string IPAddress { get; set; }        
 
@@ -55,7 +48,7 @@ namespace crash
         public Detector Detector
         {
             get { return mDetector; }
-            set { mDetector = value; LoadGEScriptFunc(); }
+            set { mDetector = value; }
         }
 
         // Number of channels used with this session
@@ -140,26 +133,8 @@ namespace crash
             NumChannels = 0;
             MaxChannelCount = 0;
             MinChannelCount = 0;            
-            Spectrums.Clear();
-            GEScriptFunc = null;           
+            Spectrums.Clear();            
             Background = null;
-        }
-
-        private bool LoadGEScriptFunc()
-        {
-            // Initialize GE factor function if GE script exists
-
-            string geScriptFile = GAEnvironment.GEScriptPath + Path.DirectorySeparatorChar + mDetector.GEScript;
-
-            if (!File.Exists(geScriptFile))            
-                throw new Exception("GE script does not exist: " + geScriptFile);            
-
-            GEScriptFunc = null;            
-            string script = File.ReadAllText(geScriptFile);
-            LuaEngine.DoString(script);
-            GEScriptFunc = LuaEngine["gevalue"] as LuaFunction;
-            
-            return GEScriptFunc != null;
         }
 
         public bool SetBackground(List<Spectrum> specs)

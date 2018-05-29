@@ -77,19 +77,10 @@ namespace crash
                 if (!Directory.Exists(GAEnvironment.SettingsPath))
                     Directory.CreateDirectory(GAEnvironment.SettingsPath);
 
-                if (!Directory.Exists(GAEnvironment.GEScriptPath))
-                    Directory.CreateDirectory(GAEnvironment.GEScriptPath);
-
                 installDir = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + Path.DirectorySeparatorChar;
 
                 if (!File.Exists(GAEnvironment.NuclideLibraryFile))
                     File.Copy(installDir + "template_nuclides.lib", GAEnvironment.NuclideLibraryFile);
-
-                if (!File.Exists(GAEnvironment.GEScriptPath + Path.DirectorySeparatorChar + "osprey-nai2.lua"))
-                    File.Copy(installDir + "template_osprey-nai2.lua", GAEnvironment.GEScriptPath + Path.DirectorySeparatorChar + "osprey-nai2.lua");
-
-                if (!File.Exists(GAEnvironment.GEScriptPath + Path.DirectorySeparatorChar + "osprey-nai3.lua"))
-                    File.Copy(installDir + "template_osprey-nai3.lua", GAEnvironment.GEScriptPath + Path.DirectorySeparatorChar + "osprey-nai3.lua");
 
                 LoadSettings();
 

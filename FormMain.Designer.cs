@@ -36,7 +36,6 @@
             this.menuItemSessionInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemLoadBackgroundSelection = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemLoadBackgroundSession = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemClearBackground = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +44,6 @@
             this.menuItemSaveAsCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemView = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemShowROIHistory = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemAdjustZeroCoefficient = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuSession = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuItemSessionUnselect = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSetAsBackground = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,15 +51,6 @@
             this.contextMenuNuclides = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuItemNuclidesUnselect = new System.Windows.Forms.ToolStripMenuItem();
             this.openSessionDialog = new System.Windows.Forms.OpenFileDialog();
-            this.pagePreferences = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel11 = new System.Windows.Forms.Panel();
-            this.tbPreferencesSessionDir = new System.Windows.Forms.TextBox();
-            this.btnPreferencesSetSessionDir = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.btnPreferencesCancel = new System.Windows.Forms.Button();
-            this.btnPreferencesSave = new System.Windows.Forms.Button();
             this.pageSessions = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainerSessionLeft = new System.Windows.Forms.SplitContainer();
@@ -95,7 +84,6 @@
             this.menuItemSubtractBackground = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemLockBackgroundToZero = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemConvertToLocalTime = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnAdjustZeroPolynomial = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblSessionEnergy = new System.Windows.Forms.Label();
             this.lblSessionSelChannel = new System.Windows.Forms.Label();
@@ -108,15 +96,10 @@
             this.pageMenu = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnMenuSessions = new System.Windows.Forms.Button();
-            this.btnMenuPreferences = new System.Windows.Forms.Button();
             this.tabs = new System.Windows.Forms.TabControl();
             this.menu.SuspendLayout();
             this.contextMenuSession.SuspendLayout();
             this.contextMenuNuclides.SuspendLayout();
-            this.pagePreferences.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel11.SuspendLayout();
-            this.panel10.SuspendLayout();
             this.pageSessions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -157,7 +140,6 @@
             this.menuItemSessionInfo,
             this.toolStripSeparator4,
             this.menuItemLoadBackgroundSelection,
-            this.menuItemLoadBackgroundSession,
             this.menuItemClearBackground,
             this.toolStripSeparator7,
             this.menuItemExport});
@@ -190,13 +172,6 @@
             this.menuItemLoadBackgroundSelection.Size = new System.Drawing.Size(217, 22);
             this.menuItemLoadBackgroundSelection.Text = "Load background selection";
             this.menuItemLoadBackgroundSelection.Click += new System.EventHandler(this.menuItemLoadBackgroundSelection_Click);
-            // 
-            // menuItemLoadBackgroundSession
-            // 
-            this.menuItemLoadBackgroundSession.Name = "menuItemLoadBackgroundSession";
-            this.menuItemLoadBackgroundSession.Size = new System.Drawing.Size(217, 22);
-            this.menuItemLoadBackgroundSession.Text = "Load &background session";
-            this.menuItemLoadBackgroundSession.Click += new System.EventHandler(this.menuItemLoadBackgroundSession_Click);
             // 
             // menuItemClearBackground
             // 
@@ -247,8 +222,7 @@
             // menuItemView
             // 
             this.menuItemView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItemShowROIHistory,
-            this.menuItemAdjustZeroCoefficient});
+            this.menuItemShowROIHistory});
             this.menuItemView.Name = "menuItemView";
             this.menuItemView.Size = new System.Drawing.Size(48, 20);
             this.menuItemView.Text = "&Tools";
@@ -256,18 +230,10 @@
             // menuItemShowROIHistory
             // 
             this.menuItemShowROIHistory.Name = "menuItemShowROIHistory";
-            this.menuItemShowROIHistory.Size = new System.Drawing.Size(196, 22);
+            this.menuItemShowROIHistory.Size = new System.Drawing.Size(166, 22);
             this.menuItemShowROIHistory.Text = "Show ROI &History";
             this.menuItemShowROIHistory.ToolTipText = "Show current ROI history in separate window";
             this.menuItemShowROIHistory.Click += new System.EventHandler(this.menuItemShowROIHistory_Click);
-            // 
-            // menuItemAdjustZeroCoefficient
-            // 
-            this.menuItemAdjustZeroCoefficient.Name = "menuItemAdjustZeroCoefficient";
-            this.menuItemAdjustZeroCoefficient.Size = new System.Drawing.Size(196, 22);
-            this.menuItemAdjustZeroCoefficient.Text = "&Adjust Zero Coefficient";
-            this.menuItemAdjustZeroCoefficient.ToolTipText = "Adjust Zero Energy curve Coefficient";
-            this.menuItemAdjustZeroCoefficient.Click += new System.EventHandler(this.menuItemAdjustZero_Click);
             // 
             // contextMenuSession
             // 
@@ -316,114 +282,6 @@
             // openSessionDialog
             // 
             this.openSessionDialog.DefaultExt = "db";
-            // 
-            // pagePreferences
-            // 
-            this.pagePreferences.Controls.Add(this.tableLayoutPanel1);
-            this.pagePreferences.Controls.Add(this.panel10);
-            this.pagePreferences.Location = new System.Drawing.Point(4, 25);
-            this.pagePreferences.Name = "pagePreferences";
-            this.pagePreferences.Padding = new System.Windows.Forms.Padding(3);
-            this.pagePreferences.Size = new System.Drawing.Size(1211, 599);
-            this.pagePreferences.TabIndex = 8;
-            this.pagePreferences.Text = "Preferences";
-            this.pagePreferences.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.panel11, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1205, 563);
-            this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // panel11
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.panel11, 2);
-            this.panel11.Controls.Add(this.tbPreferencesSessionDir);
-            this.panel11.Controls.Add(this.btnPreferencesSetSessionDir);
-            this.panel11.Controls.Add(this.label5);
-            this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel11.Location = new System.Drawing.Point(3, 31);
-            this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1199, 22);
-            this.panel11.TabIndex = 0;
-            // 
-            // tbPreferencesSessionDir
-            // 
-            this.tbPreferencesSessionDir.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbPreferencesSessionDir.Location = new System.Drawing.Point(100, 0);
-            this.tbPreferencesSessionDir.Name = "tbPreferencesSessionDir";
-            this.tbPreferencesSessionDir.ReadOnly = true;
-            this.tbPreferencesSessionDir.Size = new System.Drawing.Size(969, 21);
-            this.tbPreferencesSessionDir.TabIndex = 2;
-            // 
-            // btnPreferencesSetSessionDir
-            // 
-            this.btnPreferencesSetSessionDir.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnPreferencesSetSessionDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPreferencesSetSessionDir.Location = new System.Drawing.Point(1069, 0);
-            this.btnPreferencesSetSessionDir.Name = "btnPreferencesSetSessionDir";
-            this.btnPreferencesSetSessionDir.Size = new System.Drawing.Size(130, 22);
-            this.btnPreferencesSetSessionDir.TabIndex = 1;
-            this.btnPreferencesSetSessionDir.Text = "...";
-            this.btnPreferencesSetSessionDir.UseVisualStyleBackColor = true;
-            this.btnPreferencesSetSessionDir.Click += new System.EventHandler(this.btnSetSessionDir_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label5.Location = new System.Drawing.Point(0, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(100, 15);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Session directory";
-            // 
-            // panel10
-            // 
-            this.panel10.Controls.Add(this.btnPreferencesCancel);
-            this.panel10.Controls.Add(this.btnPreferencesSave);
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel10.Location = new System.Drawing.Point(3, 566);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1205, 30);
-            this.panel10.TabIndex = 0;
-            // 
-            // btnPreferencesCancel
-            // 
-            this.btnPreferencesCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnPreferencesCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPreferencesCancel.Location = new System.Drawing.Point(945, 0);
-            this.btnPreferencesCancel.Name = "btnPreferencesCancel";
-            this.btnPreferencesCancel.Size = new System.Drawing.Size(130, 30);
-            this.btnPreferencesCancel.TabIndex = 1;
-            this.btnPreferencesCancel.Text = "Cancel";
-            this.btnPreferencesCancel.UseVisualStyleBackColor = true;
-            this.btnPreferencesCancel.Click += new System.EventHandler(this.btnPreferencesCancel_Click);
-            // 
-            // btnPreferencesSave
-            // 
-            this.btnPreferencesSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnPreferencesSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPreferencesSave.Location = new System.Drawing.Point(1075, 0);
-            this.btnPreferencesSave.Name = "btnPreferencesSave";
-            this.btnPreferencesSave.Size = new System.Drawing.Size(130, 30);
-            this.btnPreferencesSave.TabIndex = 0;
-            this.btnPreferencesSave.Text = "Save";
-            this.btnPreferencesSave.UseVisualStyleBackColor = true;
-            this.btnPreferencesSave.Click += new System.EventHandler(this.btnPreferencesSave_Click);
             // 
             // pageSessions
             // 
@@ -815,8 +673,7 @@
             // 
             this.toolsSession.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolsSession.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnOptions,
-            this.btnAdjustZeroPolynomial});
+            this.btnOptions});
             this.toolsSession.Location = new System.Drawing.Point(0, 0);
             this.toolsSession.Name = "toolsSession";
             this.toolsSession.Size = new System.Drawing.Size(1030, 25);
@@ -860,17 +717,6 @@
             this.menuItemConvertToLocalTime.Text = "Show local time";
             this.menuItemConvertToLocalTime.ToolTipText = "Show dates using local time";
             this.menuItemConvertToLocalTime.CheckedChanged += new System.EventHandler(this.menuItemConvertToLocalTime_CheckedChanged);
-            // 
-            // btnAdjustZeroPolynomial
-            // 
-            this.btnAdjustZeroPolynomial.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnAdjustZeroPolynomial.Image = global::crash.Properties.Resources.adjust32;
-            this.btnAdjustZeroPolynomial.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAdjustZeroPolynomial.Name = "btnAdjustZeroPolynomial";
-            this.btnAdjustZeroPolynomial.Size = new System.Drawing.Size(23, 22);
-            this.btnAdjustZeroPolynomial.Text = "toolStripButton1";
-            this.btnAdjustZeroPolynomial.ToolTipText = "Adjust zero polynomial for energy curve";
-            this.btnAdjustZeroPolynomial.Click += new System.EventHandler(this.menuItemAdjustZero_Click);
             // 
             // panel1
             // 
@@ -986,7 +832,6 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.btnMenuSessions);
-            this.flowLayoutPanel1.Controls.Add(this.btnMenuPreferences);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -1011,29 +856,11 @@
             this.btnMenuSessions.UseVisualStyleBackColor = true;
             this.btnMenuSessions.Click += new System.EventHandler(this.btnMenuSession_Click);
             // 
-            // btnMenuPreferences
-            // 
-            this.btnMenuPreferences.FlatAppearance.BorderSize = 0;
-            this.btnMenuPreferences.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnMenuPreferences.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnMenuPreferences.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuPreferences.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuPreferences.Image = global::crash.Properties.Resources.preferences128;
-            this.btnMenuPreferences.Location = new System.Drawing.Point(253, 50);
-            this.btnMenuPreferences.Name = "btnMenuPreferences";
-            this.btnMenuPreferences.Size = new System.Drawing.Size(200, 200);
-            this.btnMenuPreferences.TabIndex = 4;
-            this.btnMenuPreferences.Text = "Preferences";
-            this.btnMenuPreferences.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnMenuPreferences.UseVisualStyleBackColor = true;
-            this.btnMenuPreferences.Click += new System.EventHandler(this.btnMenuPreferences_Click_1);
-            // 
             // tabs
             // 
             this.tabs.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabs.Controls.Add(this.pageMenu);
             this.tabs.Controls.Add(this.pageSessions);
-            this.tabs.Controls.Add(this.pagePreferences);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 24);
             this.tabs.Margin = new System.Windows.Forms.Padding(2);
@@ -1068,11 +895,6 @@
             this.menu.PerformLayout();
             this.contextMenuSession.ResumeLayout(false);
             this.contextMenuNuclides.ResumeLayout(false);
-            this.pagePreferences.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel11.ResumeLayout(false);
-            this.panel11.PerformLayout();
-            this.panel10.ResumeLayout(false);
             this.pageSessions.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -1107,7 +929,6 @@
 
         private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem menuItemSession;
-        private System.Windows.Forms.ToolStripMenuItem menuItemLoadBackgroundSession;
         private System.Windows.Forms.ContextMenuStrip contextMenuSession;
         private System.Windows.Forms.ToolStripMenuItem menuItemSessionUnselect;
         private System.Windows.Forms.ToolStripMenuItem menuItemSessionInfo;
@@ -1126,17 +947,7 @@
         private System.Windows.Forms.OpenFileDialog openSessionDialog;
         private System.Windows.Forms.ToolStripMenuItem menuItemLoadBackgroundSelection;
         private System.Windows.Forms.ToolStripMenuItem menuItemSetAsBackground;
-        private System.Windows.Forms.ToolStripMenuItem menuItemAdjustZeroCoefficient;
         private System.Windows.Forms.ToolStripMenuItem menuItemUseAsGroundLevel;
-        private System.Windows.Forms.TabPage pagePreferences;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel11;
-        private System.Windows.Forms.TextBox tbPreferencesSessionDir;
-        private System.Windows.Forms.Button btnPreferencesSetSessionDir;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Panel panel10;
-        private System.Windows.Forms.Button btnPreferencesCancel;
-        private System.Windows.Forms.Button btnPreferencesSave;
         private System.Windows.Forms.TabPage pageSessions;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainerSessionLeft;
@@ -1170,7 +981,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemSubtractBackground;
         private System.Windows.Forms.ToolStripMenuItem menuItemLockBackgroundToZero;
         private System.Windows.Forms.ToolStripMenuItem menuItemConvertToLocalTime;
-        private System.Windows.Forms.ToolStripButton btnAdjustZeroPolynomial;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblSessionEnergy;
         private System.Windows.Forms.Label lblSessionSelChannel;
@@ -1183,7 +993,6 @@
         private System.Windows.Forms.TabPage pageMenu;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button btnMenuSessions;
-        private System.Windows.Forms.Button btnMenuPreferences;
         private System.Windows.Forms.TabControl tabs;
     }
 }

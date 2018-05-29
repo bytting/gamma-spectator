@@ -59,7 +59,7 @@ namespace crash
                 gmnMap.MapProvider = BingSatelliteMapProvider.Instance;
                 int idx = cboxMapProvider.FindString("Bing Map Satellite");
                 if (idx >= 0)
-                    cboxMapProvider.SelectedIndex = idx;
+                    cboxMapProvider.SelectedIndex = idx;                
             }
             catch (Exception ex)
             {
