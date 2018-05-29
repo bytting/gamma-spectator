@@ -261,6 +261,11 @@ namespace crash
                     // Notify external forms about new spectrum
 
                     parent.AddSpectrum(spec);
+
+                    if(session.Spectrums.Count == 1)
+                    {
+                        parent.PositionMap(spec.Latitude, spec.Longitude);
+                    }
                 }                                    
             }
             catch(Exception ex)

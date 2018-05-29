@@ -184,7 +184,7 @@
             this.gmnMap.LevelsKeepInMemmory = 5;
             this.gmnMap.Location = new System.Drawing.Point(0, 25);
             this.gmnMap.MarkersEnabled = true;
-            this.gmnMap.MaxZoom = 18;
+            this.gmnMap.MaxZoom = 22;
             this.gmnMap.MinZoom = 2;
             this.gmnMap.MouseWheelZoomEnabled = true;
             this.gmnMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;

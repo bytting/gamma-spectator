@@ -101,9 +101,6 @@ namespace crash
                     case "Google Map Satellite":
                         gmnMap.MapProvider = GoogleSatelliteMapProvider.Instance;
                         GMaps.Instance.Mode = AccessMode.ServerAndCache;
-                        gmnMap.Zoom = 5;
-                        gmnMap.MaxZoom = 18;
-                        gmnMap.MinZoom = 2;
                         gmnMap.Bearing = 0;
                         gmnMap.CanDragMap = true;
                         break;
@@ -169,10 +166,12 @@ namespace crash
             RemoveAllMarkers();
 
             foreach(Spectrum spec in currentSession.Spectrums)            
-                AddMarker(spec);            
+                AddMarker(spec);
+        }
 
-            if(currentSession.Spectrums.Count > 0)
-                gmnMap.Position = new GMap.NET.PointLatLng(currentSession.Spectrums[0].Latitude, currentSession.Spectrums[0].Longitude);
+        public void PositionMap(double lat, double lon)
+        {
+            gmnMap.Position = new GMap.NET.PointLatLng(lat, lon);
         }
 
         public void AddMarker(Spectrum s)

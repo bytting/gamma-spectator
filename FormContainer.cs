@@ -279,6 +279,11 @@ namespace crash
             }
         }
 
+        public void PositionMap(double lat, double lon)
+        {
+            formMap.PositionMap(lat, lon);
+        }
+
         private void menuItemFileExit_Click(object sender, EventArgs e)
         {
             Close();
