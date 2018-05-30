@@ -26,6 +26,7 @@ namespace crash
         private bool active;
         private ConcurrentQueue<APISpectrum> recvq = null;
         private SessionSyncArgs args = new SessionSyncArgs();
+        private long startTime, currentTime;
 
         public SessionSync(ILog l, ConcurrentQueue<APISpectrum> recvQueue)
         {
@@ -44,8 +45,11 @@ namespace crash
 
                 while (running)
                 {
-                    if(active && !String.IsNullOrEmpty(args.SessionName))
-                    {
+                    startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+                    if (active && !String.IsNullOrEmpty(args.SessionName))
+                    {                        
+
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(args.WSAddress + "/spectrums/" + args.SessionName + "?minIdx=" + (args.LastSessionIndex + 1));
                         string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(args.Username + ":" + args.Password));
                         request.Headers.Add("Authorization", "Basic " + credentials);
@@ -62,20 +66,23 @@ namespace crash
                             active = false;
                             continue;
                         }
-
-                        if (active)
+                        
+                        List<APISpectrum> spectrumList = JsonConvert.DeserializeObject<List<APISpectrum>>(data);
+                        foreach (APISpectrum apiSpec in spectrumList)
                         {
-                            List<APISpectrum> spectrumList = JsonConvert.DeserializeObject<List<APISpectrum>>(data);
-                            foreach (APISpectrum apiSpec in spectrumList)
-                            {
-                                recvq.Enqueue(apiSpec);
-                                if (apiSpec.SessionIndex > args.LastSessionIndex)
-                                    args.LastSessionIndex = apiSpec.SessionIndex;
-                            }
+                            if (!active)
+                                break;
+
+                            recvq.Enqueue(apiSpec);
+                            if (apiSpec.SessionIndex > args.LastSessionIndex)
+                                args.LastSessionIndex = apiSpec.SessionIndex;
                         }
                     }
 
-                    Thread.Sleep(3000);
+                    currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+                    int delta = (int)(currentTime - startTime);
+                    Thread.Sleep(delta >= 3000 ? 0 : delta);
                 }
             }
             catch (Exception ex)

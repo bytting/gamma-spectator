@@ -22,7 +22,7 @@ namespace crash
         List<APISessionInfo> sessionInfoList = null;
 
         public APISession SelectedSession;
-        public int SpectrumCount;
+        public int SelectedSpectrumCount;
 
         public FormSelectSession(FormContainer p, GASettings s, ILog l)
         {
@@ -115,7 +115,7 @@ namespace crash
             }
 
             SelectedSession = JsonConvert.DeserializeObject<APISession>(data);
-            SpectrumCount = specCount;
+            SelectedSpectrumCount = specCount;
 
             DialogResult = DialogResult.OK;
             Close();

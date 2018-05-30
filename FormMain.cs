@@ -266,6 +266,13 @@ namespace crash
                     {
                         parent.PositionMap(spec.Latitude, spec.Longitude);
                     }
+
+                    if(progress.Visible)
+                    {
+                        progress.Value++;
+                        if (progress.Value >= progress.Maximum)
+                            progress.Visible = false;
+                    }
                 }                                    
             }
             catch(Exception ex)
@@ -587,6 +594,9 @@ namespace crash
 
             syncService.Deactivate();
 
+            APISpectrum spec = new APISpectrum();
+            while (recvq.TryDequeue(out spec)) ;
+
             parent.ClearSession();
 
             session = new Session(form.SelectedSession);
@@ -600,6 +610,12 @@ namespace crash
             syncArgs.LastSessionIndex = -1;
 
             syncService.Activate(syncArgs);
+            
+            progress.Minimum = 0;
+            progress.Maximum = form.SelectedSpectrumCount;
+            progress.Step = 1;
+            progress.Value = 0;
+            progress.Visible = true;
 
             log.Info("Session " + session.Name + " loaded");
         }

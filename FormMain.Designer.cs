@@ -97,6 +97,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnMenuSessions = new System.Windows.Forms.Button();
             this.tabs = new System.Windows.Forms.TabControl();
+            this.progress = new System.Windows.Forms.ProgressBar();
             this.menu.SuspendLayout();
             this.contextMenuSession.SuspendLayout();
             this.contextMenuNuclides.SuspendLayout();
@@ -447,7 +448,7 @@
             this.graphSession.ScrollMinX = 0D;
             this.graphSession.ScrollMinY = 0D;
             this.graphSession.ScrollMinY2 = 0D;
-            this.graphSession.Size = new System.Drawing.Size(1030, 437);
+            this.graphSession.Size = new System.Drawing.Size(1030, 435);
             this.graphSession.TabIndex = 5;
             this.graphSession.UseExtendedPrintDialog = true;
             this.graphSession.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphSession_MouseClick);
@@ -726,9 +727,9 @@
             this.panel1.Controls.Add(this.lblSessionChannel);
             this.panel1.Controls.Add(this.lblGroundLevelIndex);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 547);
+            this.panel1.Location = new System.Drawing.Point(0, 545);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1030, 25);
+            this.panel1.Size = new System.Drawing.Size(1030, 27);
             this.panel1.TabIndex = 6;
             // 
             // lblSessionEnergy
@@ -758,7 +759,7 @@
             this.btnSessionsClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSessionsClose.Location = new System.Drawing.Point(900, 0);
             this.btnSessionsClose.Name = "btnSessionsClose";
-            this.btnSessionsClose.Size = new System.Drawing.Size(130, 25);
+            this.btnSessionsClose.Size = new System.Drawing.Size(130, 27);
             this.btnSessionsClose.TabIndex = 2;
             this.btnSessionsClose.Text = "Close";
             this.btnSessionsClose.UseVisualStyleBackColor = true;
@@ -788,6 +789,7 @@
             // panelSessionsControl
             // 
             this.panelSessionsControl.Controls.Add(this.lblSessionsDatabase);
+            this.panelSessionsControl.Controls.Add(this.progress);
             this.panelSessionsControl.Controls.Add(this.btnSessionsBrowse);
             this.panelSessionsControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSessionsControl.Location = new System.Drawing.Point(0, 0);
@@ -799,13 +801,12 @@
             // 
             this.lblSessionsDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSessionsDatabase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSessionsDatabase.Location = new System.Drawing.Point(130, 0);
+            this.lblSessionsDatabase.Location = new System.Drawing.Point(270, 0);
             this.lblSessionsDatabase.Name = "lblSessionsDatabase";
             this.lblSessionsDatabase.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
-            this.lblSessionsDatabase.Size = new System.Drawing.Size(1081, 25);
+            this.lblSessionsDatabase.Size = new System.Drawing.Size(941, 25);
             this.lblSessionsDatabase.TabIndex = 4;
             this.lblSessionsDatabase.Text = "<lblSessionsDatabase>";
-            this.lblSessionsDatabase.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btnSessionsBrowse
             // 
@@ -870,6 +871,15 @@
             this.tabs.Size = new System.Drawing.Size(1219, 628);
             this.tabs.TabIndex = 5;
             this.tabs.SelectedIndexChanged += new System.EventHandler(this.tabs_SelectedIndexChanged);
+            // 
+            // progress
+            // 
+            this.progress.Dock = System.Windows.Forms.DockStyle.Left;
+            this.progress.Location = new System.Drawing.Point(130, 0);
+            this.progress.Name = "progress";
+            this.progress.Size = new System.Drawing.Size(140, 25);
+            this.progress.TabIndex = 5;
+            this.progress.Visible = false;
             // 
             // FormMain
             // 
@@ -994,6 +1004,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button btnMenuSessions;
         private System.Windows.Forms.TabControl tabs;
+        private System.Windows.Forms.ProgressBar progress;
     }
 }
 
