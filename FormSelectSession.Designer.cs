@@ -30,13 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSelectSession));
             this.status = new System.Windows.Forms.StatusStrip();
+            this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.gridSessions = new System.Windows.Forms.DataGridView();
-            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnLivetime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOk = new System.Windows.Forms.Button();
+            this.gridSessions = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,7 +43,10 @@
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.btnPopulate = new System.Windows.Forms.Button();
-            this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnLivetime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSpectrumCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridSessions)).BeginInit();
@@ -62,6 +63,12 @@
             this.status.TabIndex = 1;
             this.status.Text = "statusStrip1";
             // 
+            // lblStatus
+            // 
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(68, 17);
+            this.lblStatus.Text = "<lblStatus>";
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.btnCancel);
@@ -71,6 +78,28 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(868, 32);
             this.panel1.TabIndex = 2;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnCancel.Location = new System.Drawing.Point(656, 0);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(105, 32);
+            this.btnCancel.TabIndex = 1;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnOk
+            // 
+            this.btnOk.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnOk.Location = new System.Drawing.Point(761, 0);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(107, 32);
+            this.btnOk.TabIndex = 0;
+            this.btnOk.Text = "Ok";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // gridSessions
             // 
@@ -84,7 +113,8 @@
             this.gridSessions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnName,
             this.ColumnComment,
-            this.ColumnLivetime});
+            this.ColumnLivetime,
+            this.ColumnSpectrumCount});
             this.gridSessions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridSessions.Location = new System.Drawing.Point(0, 99);
             this.gridSessions.MultiSelect = false;
@@ -94,46 +124,6 @@
             this.gridSessions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridSessions.Size = new System.Drawing.Size(868, 428);
             this.gridSessions.TabIndex = 3;
-            // 
-            // ColumnName
-            // 
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
-            this.ColumnName.ReadOnly = true;
-            // 
-            // ColumnComment
-            // 
-            this.ColumnComment.HeaderText = "Comment";
-            this.ColumnComment.Name = "ColumnComment";
-            this.ColumnComment.ReadOnly = true;
-            // 
-            // ColumnLivetime
-            // 
-            this.ColumnLivetime.HeaderText = "Livetime";
-            this.ColumnLivetime.Name = "ColumnLivetime";
-            this.ColumnLivetime.ReadOnly = true;
-            // 
-            // btnOk
-            // 
-            this.btnOk.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnOk.Location = new System.Drawing.Point(761, 0);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(107, 32);
-            this.btnOk.TabIndex = 0;
-            this.btnOk.Text = "Ok";
-            this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnCancel.Location = new System.Drawing.Point(656, 0);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(105, 32);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -225,11 +215,29 @@
             this.btnPopulate.UseVisualStyleBackColor = true;
             this.btnPopulate.Click += new System.EventHandler(this.btnPopulate_Click);
             // 
-            // lblStatus
+            // ColumnName
             // 
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(68, 17);
-            this.lblStatus.Text = "<lblStatus>";
+            this.ColumnName.HeaderText = "Name";
+            this.ColumnName.Name = "ColumnName";
+            this.ColumnName.ReadOnly = true;
+            // 
+            // ColumnComment
+            // 
+            this.ColumnComment.HeaderText = "Comment";
+            this.ColumnComment.Name = "ColumnComment";
+            this.ColumnComment.ReadOnly = true;
+            // 
+            // ColumnLivetime
+            // 
+            this.ColumnLivetime.HeaderText = "Livetime";
+            this.ColumnLivetime.Name = "ColumnLivetime";
+            this.ColumnLivetime.ReadOnly = true;
+            // 
+            // ColumnSpectrumCount
+            // 
+            this.ColumnSpectrumCount.HeaderText = "#Spectrums";
+            this.ColumnSpectrumCount.Name = "ColumnSpectrumCount";
+            this.ColumnSpectrumCount.ReadOnly = true;
             // 
             // FormSelectSession
             // 
@@ -262,9 +270,6 @@
         private System.Windows.Forms.StatusStrip status;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView gridSessions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnComment;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLivetime;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -276,5 +281,9 @@
         private System.Windows.Forms.TextBox tbPassword;
         private System.Windows.Forms.Button btnPopulate;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnComment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLivetime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSpectrumCount;
     }
 }

@@ -200,6 +200,7 @@
     <Compile Include="ROIData.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="SessionExporter.cs" />
+    <Compile Include="SessionInfo.cs" />
     <Compile Include="SessionSync.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Spectrum.cs" />

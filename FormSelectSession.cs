@@ -19,9 +19,10 @@ namespace crash
         private GASettings settings = null;
         private ILog log = null;
 
-        List<APISession> sessionList = null;
+        List<APISessionInfo> sessionInfoList = null;
 
         public APISession SelectedSession;
+        public int SpectrumCount;
 
         public FormSelectSession(FormContainer p, GASettings s, ILog l)
         {
@@ -45,7 +46,7 @@ namespace crash
             string username = tbUsername.Text.Trim();
             string password = tbPassword.Text;
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/sessions");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/sessions/info");
             string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
             request.Headers.Add("Authorization", "Basic " + credentials);
             request.Timeout = 20000;
@@ -67,10 +68,10 @@ namespace crash
             parent.SaveSettings();
 
             gridSessions.Rows.Clear();
-            sessionList = JsonConvert.DeserializeObject<List<APISession>>(data);
-            foreach(APISession apiSession in sessionList)
+            sessionInfoList = JsonConvert.DeserializeObject<List<APISessionInfo>>(data);
+            foreach(APISessionInfo si in sessionInfoList)
             {
-                gridSessions.Rows.Add(new string[] { apiSession.Name, apiSession.Comment, apiSession.Livetime.ToString() });
+                gridSessions.Rows.Add(new string[] { si.Name, si.Comment, si.Livetime.ToString(), si.SpectrumCount.ToString() });
             }
 
             lblStatus.Text = "Sessions loaded at " + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
@@ -91,7 +92,30 @@ namespace crash
             }
 
             string name = gridSessions.SelectedRows[0].Cells["ColumnName"].Value.ToString();
-            SelectedSession = sessionList.Find(x => x.Name == name);
+            int specCount = Convert.ToInt32(gridSessions.SelectedRows[0].Cells["ColumnSpectrumCount"].Value);
+
+            string url = tbAddress.Text.Trim();
+            string username = tbUsername.Text.Trim();
+            string password = tbPassword.Text;
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/sessions/" + name);
+            string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
+            request.Headers.Add("Authorization", "Basic " + credentials);
+            request.Timeout = 20000;
+            request.Method = WebRequestMethods.Http.Get;
+            request.Accept = "application/json";
+
+            string data;
+            HttpStatusCode code = Utils.GetResponseData(request, out data);
+
+            if (code != HttpStatusCode.OK)
+            {
+                lblStatus.Text = code.ToString() + ": " + data;
+                return;
+            }
+
+            SelectedSession = JsonConvert.DeserializeObject<APISession>(data);
+            SpectrumCount = specCount;
 
             DialogResult = DialogResult.OK;
             Close();
