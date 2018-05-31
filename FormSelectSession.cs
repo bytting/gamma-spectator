@@ -46,35 +46,60 @@ namespace crash
             string username = tbUsername.Text.Trim();
             string password = tbPassword.Text;
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/sessions/info");
-            string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
-            request.Headers.Add("Authorization", "Basic " + credentials);
-            request.Timeout = 20000;
-            request.Method = WebRequestMethods.Http.Get;
-            request.Accept = "application/json";
-
-            string data;
-            HttpStatusCode code = Utils.GetResponseData(request, out data);
-
-            if (code != HttpStatusCode.OK)
-            {                
-                lblStatus.Text = code.ToString() + ": " + data;
+            if(String.IsNullOrEmpty(url))
+            {
+                MessageBox.Show("You must provide a web service address");
                 return;
             }
-            
-            settings.LastUploadHostname = url;
-            settings.LastUploadUsername = username;
-            settings.LastUploadPassword = password;
-            parent.SaveSettings();
 
-            gridSessions.Rows.Clear();
-            sessionInfoList = JsonConvert.DeserializeObject<List<APISessionInfo>>(data);
-            foreach(APISessionInfo si in sessionInfoList)
+            if (String.IsNullOrEmpty(username))
             {
-                gridSessions.Rows.Add(new string[] { si.Name, si.Comment, si.Livetime.ToString(), si.SpectrumCount.ToString() });
+                MessageBox.Show("You must provide a username for the web service");
+                return;
             }
 
-            lblStatus.Text = "Sessions loaded at " + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+            if (String.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("You must provide a password for the web service");
+                return;
+            }
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/sessions/info");
+                string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
+                request.Headers.Add("Authorization", "Basic " + credentials);
+                request.Timeout = 20000;
+                request.Method = WebRequestMethods.Http.Get;
+                request.Accept = "application/json";
+
+                string data;
+                HttpStatusCode code = Utils.GetResponseData(request, out data);
+
+                if (code != HttpStatusCode.OK)
+                {
+                    MessageBox.Show("Connecting to web service failed with code: " + code.ToString());                    
+                    return;
+                }
+
+                settings.LastUploadHostname = url;
+                settings.LastUploadUsername = username;
+                settings.LastUploadPassword = password;
+                parent.SaveSettings();
+
+                gridSessions.Rows.Clear();
+                sessionInfoList = JsonConvert.DeserializeObject<List<APISessionInfo>>(data);
+                foreach (APISessionInfo si in sessionInfoList)
+                {
+                    gridSessions.Rows.Add(new string[] { si.Name, si.Comment, si.Livetime.ToString(), si.SpectrumCount.ToString() });
+                }
+
+                lblStatus.Text = "Sessions loaded at " + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

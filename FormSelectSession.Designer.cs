@@ -35,6 +35,10 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.gridSessions = new System.Windows.Forms.DataGridView();
+            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnLivetime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSpectrumCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -43,10 +47,6 @@
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.btnPopulate = new System.Windows.Forms.Button();
-            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnLivetime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSpectrumCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridSessions)).BeginInit();
@@ -124,6 +124,30 @@
             this.gridSessions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridSessions.Size = new System.Drawing.Size(868, 428);
             this.gridSessions.TabIndex = 3;
+            // 
+            // ColumnName
+            // 
+            this.ColumnName.HeaderText = "Name";
+            this.ColumnName.Name = "ColumnName";
+            this.ColumnName.ReadOnly = true;
+            // 
+            // ColumnComment
+            // 
+            this.ColumnComment.HeaderText = "Comment";
+            this.ColumnComment.Name = "ColumnComment";
+            this.ColumnComment.ReadOnly = true;
+            // 
+            // ColumnLivetime
+            // 
+            this.ColumnLivetime.HeaderText = "Livetime";
+            this.ColumnLivetime.Name = "ColumnLivetime";
+            this.ColumnLivetime.ReadOnly = true;
+            // 
+            // ColumnSpectrumCount
+            // 
+            this.ColumnSpectrumCount.HeaderText = "#Spectrums";
+            this.ColumnSpectrumCount.Name = "ColumnSpectrumCount";
+            this.ColumnSpectrumCount.ReadOnly = true;
             // 
             // tableLayoutPanel1
             // 
@@ -214,30 +238,6 @@
             this.btnPopulate.Text = "Query sessions";
             this.btnPopulate.UseVisualStyleBackColor = true;
             this.btnPopulate.Click += new System.EventHandler(this.btnPopulate_Click);
-            // 
-            // ColumnName
-            // 
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
-            this.ColumnName.ReadOnly = true;
-            // 
-            // ColumnComment
-            // 
-            this.ColumnComment.HeaderText = "Comment";
-            this.ColumnComment.Name = "ColumnComment";
-            this.ColumnComment.ReadOnly = true;
-            // 
-            // ColumnLivetime
-            // 
-            this.ColumnLivetime.HeaderText = "Livetime";
-            this.ColumnLivetime.Name = "ColumnLivetime";
-            this.ColumnLivetime.ReadOnly = true;
-            // 
-            // ColumnSpectrumCount
-            // 
-            this.ColumnSpectrumCount.HeaderText = "#Spectrums";
-            this.ColumnSpectrumCount.Name = "ColumnSpectrumCount";
-            this.ColumnSpectrumCount.ReadOnly = true;
             // 
             // FormSelectSession
             // 

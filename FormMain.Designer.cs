@@ -91,8 +91,8 @@
             this.lblGroundLevelIndex = new System.Windows.Forms.Label();
             this.panelSessionsControl = new System.Windows.Forms.Panel();
             this.lblSessionsDatabase = new System.Windows.Forms.Label();
-            this.progress = new System.Windows.Forms.ProgressBar();
             this.btnSessionsBrowse = new System.Windows.Forms.Button();
+            this.progress = new System.Windows.Forms.ProgressBar();
             this.tabs = new System.Windows.Forms.TabControl();
             this.menu.SuspendLayout();
             this.contextMenuSession.SuspendLayout();
@@ -789,16 +789,6 @@
             this.lblSessionsDatabase.TabIndex = 4;
             this.lblSessionsDatabase.Text = "<lblSessionsDatabase>";
             // 
-            // progress
-            // 
-            this.progress.Dock = System.Windows.Forms.DockStyle.Right;
-            this.progress.Location = new System.Drawing.Point(1071, 0);
-            this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(140, 25);
-            this.progress.Step = 1;
-            this.progress.TabIndex = 5;
-            this.progress.Visible = false;
-            // 
             // btnSessionsBrowse
             // 
             this.btnSessionsBrowse.Dock = System.Windows.Forms.DockStyle.Left;
@@ -810,6 +800,16 @@
             this.btnSessionsBrowse.Text = "Open session";
             this.btnSessionsBrowse.UseVisualStyleBackColor = true;
             this.btnSessionsBrowse.Click += new System.EventHandler(this.menuItemLoadSession_Click);
+            // 
+            // progress
+            // 
+            this.progress.Dock = System.Windows.Forms.DockStyle.Right;
+            this.progress.Location = new System.Drawing.Point(1071, 0);
+            this.progress.Name = "progress";
+            this.progress.Size = new System.Drawing.Size(140, 25);
+            this.progress.Step = 1;
+            this.progress.TabIndex = 5;
+            this.progress.Visible = false;
             // 
             // tabs
             // 
