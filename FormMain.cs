@@ -262,13 +262,14 @@ namespace crash
 
                     parent.AddSpectrum(spec);
 
-                    if(session.Spectrums.Count == 1)
-                    {
+                    if(session.Spectrums.Count == 1)                    
                         parent.PositionMap(spec.Latitude, spec.Longitude);
-                    }
 
-                    if(progress.Value < progress.Maximum)                    
+                    if(progress.Value < progress.Maximum)
                         progress.Value++;
+
+                    if(progress.Value >= progress.Maximum)
+                        progress.Visible = false;
                 }                                    
             }
             catch(Exception ex)
@@ -601,8 +602,9 @@ namespace crash
 
             syncService.Activate(syncArgs);
                         
-            progress.Maximum = form.SelectedSpectrumCount;
-            progress.Value = 0;            
+            progress.Maximum = form.SelectedSpectrumCount;            
+            progress.Value = 0;
+            progress.Visible = true;
 
             log.Info("Session " + session.Name + " loaded");
         }

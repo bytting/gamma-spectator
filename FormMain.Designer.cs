@@ -770,8 +770,8 @@
             // panelSessionsControl
             // 
             this.panelSessionsControl.Controls.Add(this.lblSessionsDatabase);
-            this.panelSessionsControl.Controls.Add(this.progress);
             this.panelSessionsControl.Controls.Add(this.btnSessionsBrowse);
+            this.panelSessionsControl.Controls.Add(this.progress);
             this.panelSessionsControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSessionsControl.Location = new System.Drawing.Point(0, 0);
             this.panelSessionsControl.Name = "panelSessionsControl";
@@ -782,7 +782,7 @@
             // 
             this.lblSessionsDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSessionsDatabase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSessionsDatabase.Location = new System.Drawing.Point(270, 0);
+            this.lblSessionsDatabase.Location = new System.Drawing.Point(130, 0);
             this.lblSessionsDatabase.Name = "lblSessionsDatabase";
             this.lblSessionsDatabase.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
             this.lblSessionsDatabase.Size = new System.Drawing.Size(941, 25);
@@ -791,12 +791,13 @@
             // 
             // progress
             // 
-            this.progress.Dock = System.Windows.Forms.DockStyle.Left;
-            this.progress.Location = new System.Drawing.Point(130, 0);
+            this.progress.Dock = System.Windows.Forms.DockStyle.Right;
+            this.progress.Location = new System.Drawing.Point(1071, 0);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(140, 25);
             this.progress.Step = 1;
             this.progress.TabIndex = 5;
+            this.progress.Visible = false;
             // 
             // btnSessionsBrowse
             // 
