@@ -99,7 +99,7 @@ namespace crash
                 // Hide tabs on tabcontrol
                 tabs.ItemSize = new Size(0, 1);
                 tabs.SizeMode = TabSizeMode.Fixed;
-                tabs.SelectedTab = pageMenu;
+                tabs.SelectedTab = pageSessions;
 
                 menuItemConvertToLocalTime.Checked = settings.DisplayLocalTime;
 
@@ -267,12 +267,8 @@ namespace crash
                         parent.PositionMap(spec.Latitude, spec.Longitude);
                     }
 
-                    if(progress.Visible)
-                    {
+                    if(progress.Value < progress.Maximum)                    
                         progress.Value++;
-                        if (progress.Value >= progress.Maximum)
-                            progress.Visible = false;
-                    }
                 }                                    
             }
             catch(Exception ex)
@@ -543,8 +539,7 @@ namespace crash
         }
 
         private void btnMenuSession_Click(object sender, EventArgs e)
-        {
-            tabs.SelectedTab = pageSessions;
+        {            
         }
 
         private void tabs_SelectedIndexChanged(object sender, EventArgs e)
@@ -559,12 +554,7 @@ namespace crash
             {
                 parent.SetUILayout(UILayout.Session1);
                 menuItemSession.Visible = true;
-            }                        
-            else if (tabs.SelectedTab == pageMenu)
-            {
-                parent.SetUILayout(UILayout.Menu);
-                menuItemView.Visible = false;
-            }            
+            }
         }             
 
         private void lbSession_SelectedIndexChanged(object sender, EventArgs e)
@@ -610,12 +600,9 @@ namespace crash
             syncArgs.LastSessionIndex = -1;
 
             syncService.Activate(syncArgs);
-            
-            progress.Minimum = 0;
+                        
             progress.Maximum = form.SelectedSpectrumCount;
-            progress.Step = 1;
-            progress.Value = 0;
-            progress.Visible = true;
+            progress.Value = 0;            
 
             log.Info("Session " + session.Name + " loaded");
         }
@@ -878,12 +865,7 @@ namespace crash
         private void menuItemConvertToLocalTime_CheckedChanged(object sender, EventArgs e)
         {
             settings.DisplayLocalTime = menuItemConvertToLocalTime.Checked;
-        }
-
-        private void btnSessionsClose_Click(object sender, EventArgs e)
-        {
-            tabs.SelectedTab = pageMenu;
-        }                                                
+        }                                                        
 
         private void menuItemLoadBackgroundSelection_Click(object sender, EventArgs e)
         {

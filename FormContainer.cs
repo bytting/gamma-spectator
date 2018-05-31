@@ -92,8 +92,8 @@ namespace crash
                 formMap.Left = -1000;
                 formMain = new FormMain(this, settings, log);
                 formMain.Left = -1000;
-                
-                menuItemLayoutMenu_Click(sender, e);
+
+                menuItemLayoutSession_Click(sender, e);
 
                 statusLabel.Text = "";
             }
@@ -323,11 +323,6 @@ namespace crash
         private void menuItemLayoutArrangeIcons_Click(object sender, EventArgs e)
         {
             LayoutMdi(MdiLayout.ArrangeIcons);
-        }
-
-        private void menuItemLayoutMenu_Click(object sender, EventArgs e)
-        {
-            SetUILayout(UILayout.Menu);
         }
 
         private void menuItemLayoutSetup_Click(object sender, EventArgs e)
