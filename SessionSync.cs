@@ -50,7 +50,7 @@ namespace crash
                     if (active && !String.IsNullOrEmpty(args.SessionName))
                     {                        
 
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(args.WSAddress + "/spectrums/" + args.SessionName + "?minIdx=" + (args.LastSessionIndex + 1));
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(args.WSAddress + "/spectrums/" + args.SessionName + "?minIdx=" + (args.LastSessionIndex + 1) + "&maxCnt=300");
                         string credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(args.Username + ":" + args.Password));
                         request.Headers.Add("Authorization", "Basic " + credentials);
                         request.Timeout = 8000;
@@ -82,7 +82,9 @@ namespace crash
                     currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
                     int delta = (int)(currentTime - startTime);
-                    Thread.Sleep(delta >= 3000 ? 0 : delta);
+                    int sleepTime = (delta < 3000) ? 3000 - delta : 3000;
+                    log.Debug(sleepTime);
+                    Thread.Sleep(sleepTime);
                 }
             }
             catch (Exception ex)
