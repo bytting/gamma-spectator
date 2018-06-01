@@ -82,8 +82,7 @@ namespace crash
                     currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
                     int delta = (int)(currentTime - startTime);
-                    int sleepTime = (delta < 3000) ? 3000 - delta : 3000;
-                    log.Debug(sleepTime);
+                    int sleepTime = (delta < 3000) ? 3000 - delta : 0;
                     Thread.Sleep(sleepTime);
                 }
             }
