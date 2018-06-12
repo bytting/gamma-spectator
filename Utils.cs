@@ -20,6 +20,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace crash
@@ -78,6 +79,18 @@ namespace crash
                     break;
             }
             return c;
+        }
+
+        public static bool ValidateIP(string ip)
+        {
+            IPAddress ipAddr = null;
+            return IPAddress.TryParse(ip, out ipAddr);
+        }
+
+        public static bool ValidateUri(string uri)
+        {
+            Uri uriTest;
+            return Uri.TryCreate(uri, UriKind.Absolute, out uriTest) && (uriTest.Scheme == Uri.UriSchemeHttp || uriTest.Scheme == Uri.UriSchemeHttps);
         }
 
         public static HttpStatusCode GetResponseData(HttpWebRequest request, out string data)

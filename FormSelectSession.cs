@@ -46,24 +46,18 @@ namespace crash
             string username = tbUsername.Text.Trim();
             string password = tbPassword.Text;
 
-            if(String.IsNullOrEmpty(url))
+            if(String.IsNullOrEmpty(url) || String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
             {
-                MessageBox.Show("You must provide a web service address");
+                MessageBox.Show("Web service address, username and password is required");
                 return;
             }
 
-            if (String.IsNullOrEmpty(username))
+            if (!Utils.ValidateUri(url))
             {
-                MessageBox.Show("You must provide a username for the web service");
+                MessageBox.Show("Web service address is not valid");
                 return;
             }
-
-            if (String.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("You must provide a password for the web service");
-                return;
-            }
-
+            
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/sessions/info");
