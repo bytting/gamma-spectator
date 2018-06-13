@@ -25,16 +25,18 @@ namespace crash
         private volatile bool running;
         private bool active;
         private ConcurrentQueue<APISpectrum> recvq = null;
+        private ConcurrentBag<int> syncb = null;
         private SessionSyncArgs args = new SessionSyncArgs();
         private long startTime, currentTime;
 
-        public SessionSync(ILog l, ConcurrentQueue<APISpectrum> recvQueue)
+        public SessionSync(ILog l, ConcurrentQueue<APISpectrum> recvQueue, ConcurrentBag<int> syncBag)
         {
             log = l;
             log.Info("Creating sync service");
             running = true;
             active = false;
             recvq = recvQueue;
+            syncb = syncBag;
         }
 
         public void DoWork()
@@ -76,6 +78,41 @@ namespace crash
                             recvq.Enqueue(apiSpec);
                             if (apiSpec.SessionIndex > args.LastSessionIndex)
                                 args.LastSessionIndex = apiSpec.SessionIndex;
+                        }
+
+                        // request sync specs
+                        if (syncb.Count > 0)
+                        {
+                            int idx;
+                            while (syncb.TryPeek(out idx))
+                            {
+                                if (!active)
+                                    break;
+
+                                request = (HttpWebRequest)WebRequest.Create(args.WSAddress + "/spectrums/" + args.SessionName + "/" + idx.ToString());
+                                credentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(args.Username + ":" + args.Password));
+                                request.Headers.Add("Authorization", "Basic " + credentials);
+                                request.Timeout = 8000;
+                                request.Method = WebRequestMethods.Http.Get;
+                                request.Accept = "application/json";
+
+                                code = Utils.GetResponseData(request, out data);
+
+                                if (code == HttpStatusCode.OK)
+                                {
+                                    int i;
+                                    syncb.TryTake(out i);
+
+                                    APISpectrum spectrum = JsonConvert.DeserializeObject<APISpectrum>(data);
+                                    recvq.Enqueue(spectrum);
+                                    log.Info("Synced spectrum " + spectrum.SessionIndex);
+                                }
+                                else
+                                {
+                                    log.Info("Sync failed, skipping");
+                                    break;
+                                }
+                            }
                         }
                     }
 

@@ -44,11 +44,13 @@ namespace crash
 
         // Concurrent queue used to receive messages from network thread
         static ConcurrentQueue<APISpectrum> recvq = new ConcurrentQueue<APISpectrum>();
+        static ConcurrentBag<int> syncb = new ConcurrentBag<int>();
 
         // Sync thread
         static SessionSync syncService = null;
         static Thread syncThread = null;
         static SessionSyncArgs syncArgs = new SessionSyncArgs();
+        int syncCounter = 0;
 
         // Timer used to add spectrums to session
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -120,7 +122,7 @@ namespace crash
                 menu.Visible = false;
 
                 // Create sync thread
-                syncService = new SessionSync(log, recvq);
+                syncService = new SessionSync(log, recvq, syncb);
                 syncThread = new Thread(syncService.DoWork);
 
                 // Start thread
@@ -128,7 +130,7 @@ namespace crash
                 while (!syncThread.IsAlive) ;
 
                 // Start timer for adding spectrums to session
-                timer.Interval = 10;
+                timer.Interval = 100;
                 timer.Tick += timer_Tick;
                 timer.Start();
             }
@@ -146,7 +148,23 @@ namespace crash
                 APISpectrum apiSpec;
                 if (recvq.TryDequeue(out apiSpec))
                     dispatchRecvMsg(apiSpec);
-            }            
+            }
+
+            syncCounter++;
+            if (syncCounter > 60)
+            {
+                syncCounter = 0;
+
+                if (session != null && session.Spectrums.Count > 1)
+                {
+                    int max = session.Spectrums.Max(x => x.SessionIndex);
+                    var sequence = Enumerable.Range(0, max);
+                    var result = sequence.Where(p => !session.Spectrums.Any(p2 => p2.SessionIndex == p));
+                    foreach (int v in result)                    
+                        if (!syncb.Contains(v))                    
+                            syncb.Add(v);
+                }
+            }
         }
 
         public void makeGraphObjectType(ref object tag, GraphObjectType got)
@@ -586,7 +604,12 @@ namespace crash
             syncService.Deactivate();
 
             APISpectrum spec = new APISpectrum();
-            while (recvq.TryDequeue(out spec)) ;
+            while (recvq.TryDequeue(out spec))
+                ;
+
+            int idx;
+            while (syncb.TryTake(out idx))
+                ;
 
             parent.ClearSession();
 
